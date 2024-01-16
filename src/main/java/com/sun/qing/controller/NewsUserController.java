@@ -1,6 +1,8 @@
 package com.sun.qing.controller;
 
+import com.alibaba.fastjson.JSONObject;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.util.JSONPObject;
 import com.sun.qing.common.Result;
 import com.sun.qing.common.ResultCodeEnum;
 import com.sun.qing.pojo.NewsUser;
@@ -29,7 +31,7 @@ public class NewsUserController extends BaseController{
     Result result = null;
     protected void login(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         NewsUser user = WebUtil.readJson(req, NewsUser.class);
-        NewsUser newsUser =  userService.login(user);
+        NewsUser newsUser =  userService.findUserByUsername(user);
         if (newsUser != null){
             if (newsUser.getUserPwd().equals(MD5Util.encrypt(user.getUserPwd()))) {
                 Map<String,Object> data = new HashMap<>();
@@ -58,5 +60,36 @@ public class NewsUserController extends BaseController{
         Map<String,Object> map = new HashMap<>();
         map.put("loginUser",newsUser);
         WebUtil.writeJson(resp,Result.ok(map));
+    }
+
+    protected void checkUserName(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        String username = req.getParameter("username");
+        // 只能转json字符串,直接转username=xx是会报错的.
+
+//        NewsUser user =  new NewsUser();
+//        user.setUsername(username);
+//        NewsUser newsUser = userService.checkUserName(user);
+
+        JSONObject jsonObject = new JSONObject();
+        jsonObject.put("username",username);
+        String jsonString = jsonObject.toJSONString();
+        NewsUser user = objectMapper.readValue(jsonString, NewsUser.class);
+        NewsUser newsUser = userService.checkUserName(user);
+        if (newsUser == null){
+            WebUtil.writeJson(resp,Result.ok(null));
+        }else {
+            WebUtil.writeJson(resp,Result.build(null,ResultCodeEnum.USERNAME_USED));
+        }
+    }
+
+
+    protected void regist(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        NewsUser user = WebUtil.readJson(req, NewsUser.class);
+        int num = userService.regist(user);
+        if (num >0 ){
+            WebUtil.writeJson(resp,Result.ok(null));
+        }else {
+            WebUtil.writeJson(resp,Result.build(null,ResultCodeEnum.USERNAME_USED));
+        }
     }
 }

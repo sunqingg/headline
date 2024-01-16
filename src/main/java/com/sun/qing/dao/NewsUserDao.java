@@ -4,7 +4,9 @@ import com.sun.qing.pojo.NewsUser;
 
 public interface NewsUserDao {
 
-    NewsUser login(NewsUser user);
+    NewsUser findUserByUsername(NewsUser user);
 
     NewsUser findUserByUid(NewsUser user);
+
+    int regist(NewsUser user);
 }

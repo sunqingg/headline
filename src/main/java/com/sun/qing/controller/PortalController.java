@@ -37,4 +37,10 @@ public class PortalController extends BaseController{
         map.put("pageInfo",pageInfo);
         WebUtil.writeJson(resp,Result.ok(map));
     }
+
+    protected void showHeadlineDetail(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        String hid = req.getParameter("hid");
+        Map<String,Object> headlineDetailMap = headlineService.showHeadlineDetail(hid);
+        WebUtil.writeJson(resp,Result.ok(headlineDetailMap));
+    }
 }

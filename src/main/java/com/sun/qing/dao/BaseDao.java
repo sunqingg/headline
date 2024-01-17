@@ -77,6 +77,7 @@ public class BaseDao {
             while (resultSet.next()) {
                 // 使用反射实例化对象
                 Object obj =clazz.getDeclaredConstructor().newInstance();
+//                this.getClass().getDeclaredConstructor().newInstance();
 
                 for (int i = 1; i <= columnCount; i++) {
                     String columnName = metaData.getColumnLabel(i);

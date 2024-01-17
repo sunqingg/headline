@@ -18,7 +18,7 @@ public class NewsHeadlineDaoImpl implements NewsHeadLineDao {
     @Override
     public Map<String, Object> findNewsPage(HeadlineQueryVo queryVo) {
 //        String sql = "select hid,title,type,page_views pageViews,TIMESTAMPDIFF(HOUR,create_time,NOW()) pastHours,publisher from news_headline where is_deleted=0";
-        String sql = "select hid,title,type,page_views pageViews,HOUR(NOW()) - HOUR(create_time) pastHours,publisher from news_headline where is_deleted=0 and type = ? and (title like ? or article like ?)";
+        String sql = "select hid,title,type,page_views pageViews,TIMESTAMPDIFF(HOUR,create_time,NOW()) pastHours,publisher from news_headline where is_deleted=0 and type = ? and (title like ? or article like ?)";
         Map<String,Object> map = new HashMap<>();
 //        StringBuilder stringBuilder = new StringBuilder("%");
 //        stringBuilder.append(queryVo.getKeyWords());
@@ -38,7 +38,10 @@ public class NewsHeadlineDaoImpl implements NewsHeadLineDao {
         int size = list.size();
         int pageSize = queryVo.getPageSize();
         map.put("pageSize",pageSize);
-        map.put("totalSize",size);
+        // 所有条数
+        String sql_total = "select count(1) num from news_headline where type = ?";
+        Long num = dao.baseQueryObject(Long.class, sql_total, queryVo.getType());
+        map.put("totalSize",num);
         map.put("totalPage",size/pageSize);
         return map;
     }

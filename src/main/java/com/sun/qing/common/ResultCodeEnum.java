@@ -5,7 +5,8 @@ public enum ResultCodeEnum {
     USERNAME_ERROR(501,"usernameError"),
     PASSWORD_ERROR(503,"passwordError"),
     NOTLOGIN(504,"notlogin"),
-    USERNAME_USED(505,"usernameUsed");
+    USERNAME_USED(505,"usernameUsed"),
+    TEMPORARY_ERROR(506,"attemptAfter");
 
 
 

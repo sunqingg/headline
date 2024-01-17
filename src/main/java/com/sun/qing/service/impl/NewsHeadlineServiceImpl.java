@@ -4,6 +4,7 @@ import com.sun.qing.dao.NewsHeadLineDao;
 import com.sun.qing.dao.NewsUserDao;
 import com.sun.qing.dao.impl.NewsHeadlineDaoImpl;
 import com.sun.qing.dao.impl.NewsUserDaoImpl;
+import com.sun.qing.pojo.NewsHeadline;
 import com.sun.qing.pojo.vo.HeadlineDetailVo;
 import com.sun.qing.pojo.vo.HeadlineQueryVo;
 import com.sun.qing.service.NewsHeadlineService;
@@ -25,5 +26,20 @@ public class NewsHeadlineServiceImpl implements NewsHeadlineService {
         HashMap<String, Object> map = new HashMap<>();
         map.put("headline",headlineDetailVos);
         return map;
+    }
+
+    @Override
+    public int addNewsHeadline(NewsHeadline newsHeadline) {
+        return headlineDao.addNewsHeadline(newsHeadline);
+    }
+
+    @Override
+    public int updateHeadline(NewsHeadline newHeadline) {
+        return headlineDao.updateHeadline(newHeadline);
+    }
+
+    @Override
+    public int delHeadline(String hid) {
+        return headlineDao.delHeadline(hid);
     }
 }

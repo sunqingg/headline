@@ -23,7 +23,7 @@ public class BaseDao {
             for (int i = 0; i < args.length; i++) {
                 preparedStatement.setObject(i + 1, args[i]);
             }
-
+            System.out.println("执行sql: "+preparedStatement);
             // 执行 查询
             resultSet = preparedStatement.executeQuery();
             if (resultSet.next()) {
@@ -66,7 +66,7 @@ public class BaseDao {
             for (int i = 0; i < args.length; i++) {
                 preparedStatement.setObject(i+1,args[i]);
             }
-
+            System.out.println("执行sql: "+preparedStatement);
             // 执行 查询
             resultSet = preparedStatement.executeQuery();
 
@@ -128,7 +128,7 @@ public class BaseDao {
             for (int i = 0; i < args.length; i++) {
                 preparedStatement.setObject(i+1,args[i]);
             }
-
+            System.out.println("执行sql: "+preparedStatement);
             // 执行 增删改 executeUpdate
             rows = preparedStatement.executeUpdate();
             // 释放资源(可选)

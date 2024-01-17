@@ -55,4 +55,45 @@ public class NewsHeadlineDaoImpl implements NewsHeadLineDao {
         List<HeadlineDetailVo> headlineDetailVos = dao.baseQuery(HeadlineDetailVo.class, sql, hid);
         return headlineDetailVos.size() >0 ? headlineDetailVos.get(0) : null;
     }
+
+    /**
+     * 添加头条
+     *
+     * @param newsHeadline 入参
+     * @return 返回成功的行数
+     */
+    @Override
+    public int addNewsHeadline(NewsHeadline newsHeadline) {
+        String sql = "INSERT INTO news_headline VALUES(DEFAULT,?,?,?,?,0,NOW(),NOW(),0)";
+        List<Object> argList = new LinkedList();
+        // 标题
+        argList.add(newsHeadline.getTitle());
+        // 文章
+        argList.add(newsHeadline.getArticle());
+        // 新闻类型
+        argList.add(newsHeadline.getType());
+        // 发布者
+        argList.add(newsHeadline.getPublisher());
+        //列表转为数组 才能配置Object ... args 使用
+        Object[] toArray = argList.toArray();
+        return dao.baseUpdate(sql, toArray);
+    }
+
+    @Override
+    public int updateHeadline(NewsHeadline news) {
+        String  sql = "update news_headline set title = ?,article = ?,type =? where hid = ?";
+        List<Object> list = new LinkedList<>();
+        list.add(news.getTitle());
+        list.add(news.getArticle());
+        list.add(news.getType());
+        list.add(news.getHid());
+        Object[] array = list.toArray();
+        return dao.baseUpdate(sql,array);
+    }
+
+    @Override
+    public int delHeadline(String hid) {
+        String sql = "delete from news_headline where hid = ?";
+        return dao.baseUpdate(sql, hid);
+    }
 }

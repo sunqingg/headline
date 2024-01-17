@@ -1,5 +1,6 @@
 package com.sun.qing.dao;
 
+import com.sun.qing.pojo.NewsHeadline;
 import com.sun.qing.pojo.vo.HeadlineDetailVo;
 import com.sun.qing.pojo.vo.HeadlineQueryVo;
 
@@ -20,4 +21,15 @@ public interface NewsHeadLineDao {
      * @return 返回map格式封装的文章数据
      */
     HeadlineDetailVo showHeadlineDetail(String hid);
+
+    /**
+     * 添加头条
+     * @param newsHeadline 入参
+     * @return 返回成功的行数
+     */
+    int addNewsHeadline(NewsHeadline newsHeadline);
+
+    int updateHeadline(NewsHeadline newHeadline);
+
+    int delHeadline(String hid);
 }

@@ -1,5 +1,7 @@
 package com.sun.qing.controller;
 
+import com.sun.qing.common.Result;
+import com.sun.qing.common.ResultCodeEnum;
 import com.sun.qing.pojo.NewsHeadline;
 import com.sun.qing.pojo.NewsUser;
 import com.sun.qing.pojo.vo.HeadlineDetailVo;
@@ -15,10 +17,12 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 
 import java.io.IOException;
+import java.util.Map;
 
 @WebServlet("/headline/*")
 public class NewsHeadlineController extends BaseController{
     NewsHeadlineService headlineService =  new NewsHeadlineServiceImpl();
+    NewsUserService userService = new NewsUserServiceImpl();
 
     protected void publish(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         NewsHeadline newsHeadline = WebUtil.readJson(req, NewsHeadline.class);
@@ -38,6 +42,34 @@ public class NewsHeadlineController extends BaseController{
 //        newsHeadline.setCreateTime();
 //    }
         newsHeadline.setPublisher(id.intValue());
-        headlineService.addNewsHeadline(newsHeadline);
+        int num = headlineService.addNewsHeadline(newsHeadline);
+        if (num >0 ){
+            WebUtil.writeJson(resp, Result.ok(null));
+        }else{
+            WebUtil.writeJson(resp,Result.build(null, ResultCodeEnum.TEMPORARY_ERROR));
+        }
+    }
+
+
+    protected void findHeadlineByHid(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        Map<String, Object> map = headlineService.showHeadlineDetail(req.getParameter("hid"));
+        WebUtil.writeJson(resp,Result.ok(map));
+    }
+
+
+    protected void update(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        NewsHeadline newHeadline = WebUtil.readJson(req, NewsHeadline.class);
+        int num = headlineService.updateHeadline(newHeadline);
+        if (num>0) {
+            WebUtil.writeJson(resp,Result.ok(null));
+        }
+    }
+
+
+    protected void removeByHid(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        int num = headlineService.delHeadline(req.getParameter("hid"));
+        if (num >0) {
+            WebUtil.writeJson(resp,Result.ok(null));
+        }
     }
 }
